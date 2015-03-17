@@ -1,8 +1,34 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="en">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- bootstrap3 -->
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="bootstrap/css/bootstrap-theme.min.css">
+    <style>
+      /* smaller cotent headings font size */
+      #preview h1 {
+        font-size: 180%;
+        font-weight: bold;
+        border-bottom: 1px solid #eee; }
+      #preview h2 {
+        font-size: 150%;
+        font-weight: bold;
+        border-bottom: 1px solid #eee; }
+      #preview h3 {
+        font-size: 130%;
+        font-weight: bold; }
+      #preview h4 {
+        font-size: 120%;
+        font-weight: bold; }
+      #preview h5 {
+        font-size: 110%;
+        font-weight: bold; }
+      #preview h6 {
+        font-size: 100%;
+        font-weight: bold; }
+    </style>
     <style>
       html, body {
         padding: 0;
@@ -20,30 +46,58 @@
         left: 0;
         right: 50%;
         bottom: 0;
-        background-color: #f6f6f6;
-        vertical-align: top;
-        -webkit-box-sizing: border-box;
-        -moz-box-sizing: border-box;
         box-sizing: border-box;
-        border: none;
-        outline: none;
+        border-right: 1px solid #ccc;
       }
 
-      #editor > textarea {
-        display: inline-block;
-        border: none;
-        border-right: 1px solid #ccc;
+      #editor-header {
         position: absolute;
-        width: 100%;
         top: 0;
+        left: 0;
+        right: 0;
+        height: 6em;
+        box-sizing: border-box;
+      }
+      #editor-header .editor-header-row {
+        position: relative;
+        height: 1.5em;
+        box-sizing: border-box;
+      }
+      #editor-header .editor-header-label {
+        position: absolute;
+        width: 6em;
+        height: inherit;
+      }
+      #editor-header .editor-header-form {
+        position: absolute;
+        left: 6em;
+        right: 0;
+        height: inherit;
+      }
+      #editor-header .editor-header-form > input {
+        width: 100%;
+        height:100%;
+        box-sizing: border-box;
+      }
+
+      #editor-content {
+        position: absolute;
+        top: 6.1em;
         bottom: 0;
-        background-color: inherit;
-        font-size: 14px;
+        width: 100%;
+        border: none;
+        border-top: 1px solid #ccc;
+        background-color: #f6f6f6;
+        font-size: 100%;
         font-family: monospace;
+        line-height: 1;
         resize: none;
         outline: none;
-        padding: 0;
-        margin: 0;
+        padding: .5em;
+        box-sizing: border-box;
+        white-space: pre;
+        word-break: break-all;
+        word-wrap: break-word;
       }
 
       #preview {
@@ -52,8 +106,8 @@
         left: 50%;
         right: 0;
         bottom: 0;
-        padding: 20px;
-        overflow: scroll;
+        padding: 1em;
+        overflow: auto;
       }
 
       code {
@@ -63,7 +117,25 @@
   </head>
   <body id="app">
     <div id="editor">
-      <textarea v-model="input">
+      <div id="editor-header">
+        <div class="editor-header-row">
+          <div class="editor-header-label">Title</div>
+          <div class="editor-header-form"><input type="text" v-model="title" placeholder="タイトル" value="Markdownサンプル"></div>
+        </div>
+        <div class="editor-header-row">
+          <div class="editor-header-label">Category</div>
+          <div class="editor-header-form"><input type="text" v-model="category" placeholder="カテゴリ" value="examples"></div>
+        </div>
+        <div class="editor-header-row">
+          <div class="editor-header-label">Tags</div>
+          <div class="editor-header-form"><input type="text" v-model="tags" placeholder="タグ" value="[Markdown, サンプル]"></div>
+        </div>
+        <div class="editor-header-row">
+          <div class="editor-header-label">Description</div>
+          <div class="editor-header-form"><input type="text" v-model="description" placeholder="説明" value="Markdownの記述サンプル"></div>
+        </div>
+      </div>
+      <textarea id="editor-content" v-model="input">
 h1 header
 ============
 
@@ -134,12 +206,16 @@ Horizontal rule
 
 ***
 
-Horizontal rule
-      </textarea>
+Horizontal rule</textarea>
     </div>
     <div id="preview">
       <div v-html="input | marked"></div>
     </div>
+    <!-- jQuery (for Bootstrap) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <!-- bootstrap3 -->
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+
     <script src="https://cdn.rawgit.com/yyx990803/vue/master/dist/vue.min.js"></script>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/marked/0.3.2/marked.min.js"></script>
     <script>
