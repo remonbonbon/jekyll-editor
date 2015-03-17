@@ -4,33 +4,56 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-      html, body, #editor {
+      html, body {
+        padding: 0;
         margin: 0;
+        width: 100%;
         height: 100%;
-        font-family: 'Helvetica Neue', Arial, sans-serif;
-        color: #333;
+      }
+      body {
+        position: relative;
       }
 
-      textarea, #editor div {
-        display: inline-block;
-        width: 49%;
-        height: 100%;
+      #editor {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 50%;
+        bottom: 0;
+        background-color: #f6f6f6;
         vertical-align: top;
         -webkit-box-sizing: border-box;
         -moz-box-sizing: border-box;
         box-sizing: border-box;
-        padding: 0 20px;
+        border: none;
+        outline: none;
       }
 
-      textarea {
+      #editor > textarea {
+        display: inline-block;
         border: none;
         border-right: 1px solid #ccc;
+        position: absolute;
+        width: 100%;
+        top: 0;
+        bottom: 0;
+        background-color: inherit;
+        font-size: 14px;
+        font-family: monospace;
         resize: none;
         outline: none;
-        background-color: #f6f6f6;
-        font-size: 14px;
-        font-family: 'Monaco', courier, monospace;
+        padding: 0;
+        margin: 0;
+      }
+
+      #preview {
+        position: absolute;
+        top: 0;
+        left: 50%;
+        right: 0;
+        bottom: 0;
         padding: 20px;
+        overflow: scroll;
       }
 
       code {
@@ -38,19 +61,90 @@
       }
     </style>
   </head>
-  <body>
+  <body id="app">
     <div id="editor">
-      <textarea v-model="input"></textarea>
+      <textarea v-model="input">
+h1 header
+============
+
+h2 header
+------------
+
+### h3 header
+
+#### h4 header
+
+##### h5 header
+
+###### h6 header
+
+## Typography
+Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+*italic* _italic_
+__bold__ **bold**
+~~Strikethrough~~
+
+> Block quotes are
+> written like so.
+>
+> They can span multiple paragraphs,
+> if you like.
+>
+>> nested quotes
+
+## Links
+[example link](http://www.example.com)
+
+## Lists
+- this one
+- that one
+  - nested one
+- the other one
+
+1. first item
+2. second item
+3. third item
+
+## Code
+inline `code` inline
+
+~~~
+#include <stdio.h>
+
+int main(void) {
+  printf("hello, world!");
+  return 0;
+}
+~~~
+
+## Table
+| Left align | Right align | Center align |
+|:-----------|------------:|:------------:|
+| column     |      column |    column    |
+| column     |      column |    column    |
+
+## Horizontal rules
+
+Horizontal rule
+
+---
+
+Horizontal rule
+
+***
+
+Horizontal rule
+      </textarea>
+    </div>
+    <div id="preview">
       <div v-html="input | marked"></div>
     </div>
     <script src="https://cdn.rawgit.com/yyx990803/vue/master/dist/vue.min.js"></script>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/marked/0.3.2/marked.min.js"></script>
     <script>
     new Vue({
-      el: '#editor',
-      data: {
-        input: '# hello'
-      },
+      el: '#app',
       filters: {
         marked: marked
       }
