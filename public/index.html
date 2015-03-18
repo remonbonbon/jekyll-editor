@@ -4,118 +4,22 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- bootstrap3 -->
-    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="bootstrap/css/bootstrap-theme.min.css">
-    <style>
-      /* smaller cotent headings font size */
-      #preview h1 {
-        font-size: 180%;
-        font-weight: bold;
-        border-bottom: 1px solid #eee; }
-      #preview h2 {
-        font-size: 150%;
-        font-weight: bold;
-        border-bottom: 1px solid #eee; }
-      #preview h3 {
-        font-size: 130%;
-        font-weight: bold; }
-      #preview h4 {
-        font-size: 120%;
-        font-weight: bold; }
-      #preview h5 {
-        font-size: 110%;
-        font-weight: bold; }
-      #preview h6 {
-        font-size: 100%;
-        font-weight: bold; }
-    </style>
-    <style>
-      html, body {
-        padding: 0;
-        margin: 0;
-        width: 100%;
-        height: 100%;
-      }
-      body {
-        position: relative;
-      }
-
-      #editor {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 50%;
-        bottom: 0;
-        box-sizing: border-box;
-        border-right: 1px solid #ccc;
-      }
-
-      #editor-header {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 6em;
-        box-sizing: border-box;
-      }
-      #editor-header .editor-header-row {
-        position: relative;
-        height: 1.5em;
-        box-sizing: border-box;
-      }
-      #editor-header .editor-header-label {
-        position: absolute;
-        width: 6em;
-        height: inherit;
-      }
-      #editor-header .editor-header-form {
-        position: absolute;
-        left: 6em;
-        right: 0;
-        height: inherit;
-      }
-      #editor-header .editor-header-form > input {
-        width: 100%;
-        height:100%;
-        box-sizing: border-box;
-      }
-
-      #editor-content {
-        position: absolute;
-        top: 6.1em;
-        bottom: 0;
-        width: 100%;
-        border: none;
-        border-top: 1px solid #ccc;
-        background-color: #f6f6f6;
-        font-size: 100%;
-        font-family: monospace;
-        line-height: 1;
-        resize: none;
-        outline: none;
-        padding: .5em;
-        box-sizing: border-box;
-        white-space: pre;
-        word-break: break-all;
-        word-wrap: break-word;
-      }
-
-      #preview {
-        position: absolute;
-        top: 0;
-        left: 50%;
-        right: 0;
-        bottom: 0;
-        padding: 1em;
-        overflow: auto;
-      }
-
-      code {
-        color: #f66;
-      }
-    </style>
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <!-- custom -->
+    <link rel="stylesheet" href="style.css">
   </head>
   <body id="app">
+    <div id="toolbar">
+      <button class="btn btn-primary">save</button>
+      <div class="btn-group" data-toggle="buttons">
+        <label class="btn btn-success active">
+          <input type="radio" name="publication" autocomplete="off">draft
+        </label>
+        <label class="btn btn-success">
+          <input type="radio" name="publication" autocomplete="off" checked>publish
+        </label>
+      </div>
+    </div>
     <div id="editor">
       <div id="editor-header">
         <div class="editor-header-row">
@@ -212,19 +116,20 @@ Horizontal rule</textarea>
       <div v-html="input | marked"></div>
     </div>
     <!-- jQuery (for Bootstrap) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <!-- bootstrap3 -->
-    <script src="bootstrap/js/bootstrap.min.js"></script>
-
-    <script src="https://cdn.rawgit.com/yyx990803/vue/master/dist/vue.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <!-- marked.js -->
     <script src="http://cdnjs.cloudflare.com/ajax/libs/marked/0.3.2/marked.min.js"></script>
+    <!-- vue.js -->
+    <script src="http://cdn.rawgit.com/yyx990803/vue/master/dist/vue.min.js"></script>
     <script>
-    new Vue({
-      el: '#app',
-      filters: {
-        marked: marked
-      }
-    })
+      new Vue({
+        el: '#app',
+        filters: {
+          marked: marked
+        }
+      })
     </script>
   </body>
 </html>
