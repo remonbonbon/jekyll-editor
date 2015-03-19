@@ -1,3 +1,5 @@
+#!/usr/bin/env ruby
+# conding: utf-8
 require "sinatra"
 require "slim"
 require "sass"
@@ -5,12 +7,19 @@ require "coffee-script"
 require "uri"
 require "httparty"
 
-# ENV["GITHUB_APP_ID"] =
-# ENV["GITHUB_APP_SECRET"] =
+configure do
+  # You must be set to environmental variables
+  # ENV["GITHUB_APP_ID"] =
+  # ENV["GITHUB_APP_SECRET"] =
 
-HTTParty::Basement.default_options.update(verify: false)
+  # disable SSL verify
+  HTTParty::Basement.default_options.update(verify: false)
 
-enable :sessions
+  # store session to cookie
+  use Rack::Session::Cookie, :key => 'rack.session',
+   :expire_after => 2592000, # In seconds
+   :secret => (ENV["GITHUB_APP_ID"] * 3 + ENV["GITHUB_APP_SECRET"] * 2).crypt("saltsalt")
+end
 
 get '/' do
   unless session[:token]
@@ -22,7 +31,7 @@ get '/' do
 end
 
 get '/unauth' do
-  session[:token] = nil
+  session.clear
   redirect to '/'
 end
 
