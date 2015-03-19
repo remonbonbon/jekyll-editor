@@ -10,16 +10,32 @@ require "httparty"
 
 HTTParty::Basement.default_options.update(verify: false)
 
+enable :sessions
+
+get '/' do
+  unless session[:token]
+    slim :authorize
+  else
+    @token = session[:token]
+    slim :github
+  end
+end
+
+get '/unauth' do
+  session[:token] = nil
+  redirect to '/'
+end
+
 get '/auth' do
   query = {
     :client_id => ENV["GITHUB_APP_ID"],
+    :scope => 'repo',
     :redirect_uri => "#{env['rack.url_scheme']}://#{env['HTTP_HOST']}/auth.callback",
   }.map{|k,v|
     "#{k}=#{URI.encode v}"
   }.join("&")
   redirect "https://github.com/login/oauth/authorize?#{query}"
 end
-
 
 get '/auth.callback' do
   code = params["code"]
@@ -38,13 +54,12 @@ get '/auth.callback' do
   }
 
   res = HTTParty.post("https://github.com/login/oauth/access_token", query)
-  puts res
   halt 500, "github auth error" unless res.code == 200
   begin
-    @token = JSON.parse(res.body)["access_token"]  ## tokenを取得！
+    token = JSON.parse(res.body)["access_token"]  ## tokenを取得！
+    session[:token] = token
+    redirect to '/'
   rescue
     halt 500, "github auth error"
   end
-
-  slim :github
 end
