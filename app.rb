@@ -9,8 +9,9 @@ require "httparty"
 
 configure do
   # You must be set to environmental variables
-  # ENV["GITHUB_APP_ID"] =
-  # ENV["GITHUB_APP_SECRET"] =
+  unless ENV["GITHUB_APP_ID"] or ENV["GITHUB_APP_SECRET"]
+    raise "set GITHUB_APP_ID and GITHUB_APP_SECRET"
+  end
 
   # disable SSL verify
   HTTParty::Basement.default_options.update(verify: false)
@@ -37,9 +38,9 @@ end
 
 get '/auth' do
   query = {
-    :client_id => ENV["GITHUB_APP_ID"],
-    :scope => 'repo',
-    :redirect_uri => "#{env['rack.url_scheme']}://#{env['HTTP_HOST']}/auth.callback",
+    client_id: ENV["GITHUB_APP_ID"],
+    scope: 'repo',
+    redirect_uri: "#{env['rack.url_scheme']}://#{env['HTTP_HOST']}/auth.callback",
   }.map{|k,v|
     "#{k}=#{URI.encode v}"
   }.join("&")
@@ -52,12 +53,12 @@ get '/auth.callback' do
 
   ## get oauth token
   query = {
-    :body => {
-      :client_id => ENV["GITHUB_APP_ID"],
-      :client_secret => ENV["GITHUB_APP_SECRET"],
-      :code => code
+    body: {
+      client_id: ENV["GITHUB_APP_ID"],
+      client_secret: ENV["GITHUB_APP_SECRET"],
+      code: code
     },
-    :headers => {
+    headers: {
       "Accept" => "application/json"
     }
   }
