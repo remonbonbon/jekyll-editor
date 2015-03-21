@@ -2,6 +2,7 @@
 # conding: utf-8
 require "sinatra"
 require "slim"
+require "slim/include"
 require "sass"
 require "coffee-script"
 require "uri"
@@ -20,6 +21,9 @@ configure do
   use Rack::Session::Cookie, :key => 'rack.session',
    :expire_after => 2592000, # In seconds
    :secret => (ENV["GITHUB_APP_ID"] * 3 + ENV["GITHUB_APP_SECRET"] * 2).crypt("saltsalt")
+
+  Slim::Engine.options[:pretty] = false
+   
 end
 
 get '/' do
@@ -27,9 +31,12 @@ get '/' do
     slim :authorize
   else
     @token = session[:token]
-    slim :github
+    slim :repositories
   end
 end
+
+
+
 
 get '/unauth' do
   session.clear

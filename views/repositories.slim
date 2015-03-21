@@ -1,0 +1,42 @@
+include global/header
+
+#app
+  div.container
+    div.row
+      div.col-xs-6
+        span = "your token is '#{@token}'"
+        span.hidden#token = @token
+      div.col-xs-6
+        a.btn.btn-default href="/unauth" Unauthorize
+    div.row
+      dl v-repeat="repositories"
+        dt
+          a href="{{html_url}}" = "{{name}}"
+        dd = "{{description}}"
+        dd = "Updated at {{updated_at}}"
+
+include global/libs
+
+javascript:
+  new Vue({
+    el: '#app',
+    data: {
+      repositories: []
+    },
+    created: function() {
+      var _this = this;
+      var token = $("#token").text();
+      var root = "https://api.github.com";
+      var api = "/user/repos";
+      $.ajax({
+        url: root + api + "?access_token=" + token,
+        dataType: "json",
+        success: function(res) {
+          // console.log(res);
+          _this.$set("repositories", res);
+        }
+      });
+    }
+  })
+
+include global/footer
