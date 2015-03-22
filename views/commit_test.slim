@@ -1,0 +1,109 @@
+include global/header
+
+#app
+  #token = @token
+  a.btn.btn-default href="/unauth" Unauthorize
+  button.btn.btn-warning#commit commit
+
+include global/libs
+
+javascript:
+  var token = $("#token").text();
+  $("#commit").click(function() {
+    var root = "https://api.github.com";
+    var repos = root + "/repos/remonbonbon/dummy-gh-pages";
+    var branch = "gh-pages"
+    var access_token = "?access_token=" + token;
+    var defer = $.Deferred().resolve();
+    var base_tree;
+    var new_tree;
+    var parent_commit;
+    var new_commit;
+    defer = defer.then(function() {
+      // 1. 最新のツリーを取得 (base_treeのSHAを取得)
+      return $.ajax({
+        type: "GET",
+        url: repos + "/git/refs/heads/" + branch + access_token,
+        dataType: "json",
+        success: function(res) {
+          console.log(1, res);
+          base_tree = res.object.sha;
+        }
+      });
+    }).then(function() {
+      // 2. ツリーを作成
+      return $.ajax({
+        type: "POST",
+        url: repos + "/git/trees" + access_token,
+        data: JSON.stringify({
+          base_tree: base_tree,
+          tree: [{
+            path: "test-commit.txt",
+            mode: "100644", // file (blob)
+            type: "blod",
+            content: "content of the test commit\nupdate line"
+          }]
+        }),
+        dataType: "json",
+        success: function(res) {
+          console.log(2, res);
+          new_tree = res.sha;
+        }
+      });
+    }).then(function() {
+      // 3. 最新のコミットのSHAを取得
+      return $.ajax({
+        type: "GET",
+        url: repos + "/branches/" + branch + access_token,
+        dataType: "json",
+        success: function(res) {
+          console.log(3, res);
+          parent_commit = res.commit.sha;
+        }
+      });
+    }).then(function() {
+      // 4. コミットを作成する
+      return $.ajax({
+        type: "POST",
+        url: repos + "/git/commits" + access_token,
+        data: JSON.stringify({
+          message: "update test",
+          tree: new_tree,
+          parents: [
+            parent_commit
+          ]
+        }),
+        dataType: "json",
+        success: function(res) {
+          console.log(4, res);
+          new_commit = res.sha;
+        }
+      });
+    }).then(function() {
+      // ここまでの値を表示
+      console.log("base tree =", base_tree);
+      console.log("new tree =", new_tree);
+      console.log("parent commit =", parent_commit);
+      console.log("new commit =", new_commit);
+    }).then(function() {
+      // 5. リファレンスを更新する (push)
+      return $.ajax({
+        type: "PATCH",
+        url: repos + "/git/refs/heads/" + branch + access_token,
+        data: JSON.stringify({
+          force: false,
+          sha: new_commit
+        }),
+        dataType: "json",
+        success: function(res) {
+          console.log(5, res);
+        }
+      });
+    }).done(function() {
+      console.log("Done of commit");
+    }).fail(function() {
+      console.log("Failure of commit");
+    });
+  });
+
+include global/footer

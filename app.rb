@@ -31,7 +31,8 @@ get '/' do
     slim :authorize
   else
     @token = session[:token]
-    slim :repositories
+    # slim :repositories
+    slim :commit_test
   end
 end
 
