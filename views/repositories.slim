@@ -15,12 +15,12 @@ include global/header
           .progress-bar style="width: {{loading_rate}}%"
       dl v-repeat="repositories"
         dt
-          a href="{{url}}" = "{{name}}"
+          a href="/-/posts/{{full_name}}" = "{{name}}"
         dd = "{{description}}"
         dd = "Updated at {{updated_at}}"
 
 include global/libs
 
-script src="repositories.coffee"
+script src="/repositories.coffee"
 
 include global/footer
