@@ -60,8 +60,11 @@ get '/-/repositories' do
 end
 
 # show posts
-get '/-/posts/:owner/:repo' do |owner, repo|
-  "Hello World"
+get '/-/posts/:owner/:repo/:branch' do |owner, repo, branch|
+  @owner = owner
+  @repo = repo
+  @branch = branch
+  slim :posts
 end
 
 # compile coffee-script
