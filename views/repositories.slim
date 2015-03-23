@@ -10,7 +10,9 @@ include global/header
         a.btn.btn-default href="/unauth" Unauthorize
     div.row
       div v-if="repositories.length == 0"
-        h2 Now searching jekyll repositories...
+        h2 = "Now searching jekyll repositories... {{loading_rate | round}}% ({{loading.now}}/{{loading.total}})"
+        .progress
+          .progress-bar style="width: {{loading_rate}}%"
       dl v-repeat="repositories"
         dt
           a href="{{url}}" = "{{name}}"
