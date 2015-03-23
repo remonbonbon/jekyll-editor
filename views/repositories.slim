@@ -9,34 +9,18 @@ include global/header
       div.col-xs-6
         a.btn.btn-default href="/unauth" Unauthorize
     div.row
+      div v-if="repositories.length == 0"
+        h2 = "Now searching jekyll repositories... {{loading_rate | round}}% ({{loading.now}}/{{loading.total}})"
+        .progress
+          .progress-bar style="width: {{loading_rate}}%"
       dl v-repeat="repositories"
         dt
-          a href="{{html_url}}" = "{{name}}"
+          a href="{{url}}" = "{{name}}"
         dd = "{{description}}"
         dd = "Updated at {{updated_at}}"
 
 include global/libs
 
-javascript:
-  new Vue({
-    el: '#app',
-    data: {
-      repositories: []
-    },
-    created: function() {
-      var _this = this;
-      var token = $("#token").text();
-      var root = "https://api.github.com";
-      var api = "/user/repos";
-      $.ajax({
-        url: root + api + "?access_token=" + token,
-        dataType: "json",
-        success: function(res) {
-          // console.log(res);
-          _this.$set("repositories", res);
-        }
-      });
-    }
-  })
+script src="repositories.coffee"
 
 include global/footer
