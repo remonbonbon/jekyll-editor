@@ -31,13 +31,13 @@ get '/' do
     slim :authorize
   else
     @token = session[:token]
-    # slim :repositories
-    slim :commit_test
+    slim :repositories
   end
 end
 
-
-
+get %r{.*/(.+)\.coffee$} do |filename|
+  coffee filename.to_sym
+end
 
 get '/unauth' do
   session.clear
