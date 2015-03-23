@@ -1,0 +1,30 @@
+include global/header
+
+#app
+  span.hidden#token = @token
+  span.hidden#owner = @owner
+  span.hidden#repo = @repo
+  span.hidden#branch = @branch
+  div.container
+    div.row
+      div.col-xs-6
+        span = "your token is '#{@token}'"
+      div.col-xs-6
+        a.btn.btn-default href="/unauth" Unauthorize
+    div.row
+      div v-if="posts.length == 0"
+        h2 = "Now loading jekyll posts... {{loading_rate | round}}% ({{loading.now}}/{{loading.total}})"
+        .progress
+          .progress-bar style="width: {{loading_rate}}%"
+      ul v-repeat="posts | orderBy 'path' -1"
+        li
+          a href="/-/edit/#{@owner}/#{@repo}/#{@branch}/{{path}}"
+            span = "{{name}}"
+            span.label.label-success v-if="draft" draft
+            span.label.label-primary v-if="!draft" public
+
+include global/libs
+
+script src="/posts.coffee"
+
+include global/footer

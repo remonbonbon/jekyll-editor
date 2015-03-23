@@ -23,27 +23,62 @@ configure do
    :secret => (ENV["GITHUB_APP_ID"] * 3 + ENV["GITHUB_APP_SECRET"] * 2).crypt("saltsalt")
 
   Slim::Engine.options[:pretty] = false
-   
 end
 
-get '/' do
-  unless session[:token]
-    slim :authorize
-  else
-    @token = session[:token]
-    slim :repositories
+helpers do
+  # check authorization
+  def auth?
+    unless session[:token]
+      return false
+    else
+      return true
+    end
   end
 end
 
+# routing to main-page or authorize
+get '/' do
+  if auth?
+    redirect to '/-/repositories'
+  else
+    slim :authorize
+  end
+end
+
+# check authorization under /-/
+before '/-/*' do
+  if auth?
+    @token = session[:token]
+  else
+    request.path_info = '/'
+  end
+end
+
+# show repositories
+get '/-/repositories' do
+  slim :repositories
+end
+
+# show posts
+get '/-/posts/:owner/:repo/:branch' do |owner, repo, branch|
+  @owner = owner
+  @repo = repo
+  @branch = branch
+  slim :posts
+end
+
+# compile coffee-script
 get %r{.*/(.+)\.coffee$} do |filename|
   coffee filename.to_sym
 end
 
+# un-authorize
 get '/unauth' do
   session.clear
   redirect to '/'
 end
 
+# authorize
 get '/auth' do
   query = {
     client_id: ENV["GITHUB_APP_ID"],
@@ -55,6 +90,7 @@ get '/auth' do
   redirect "https://github.com/login/oauth/authorize?#{query}"
 end
 
+# OAuth callback
 get '/auth.callback' do
   code = params["code"]
   halt 400, "bad request (code)" if code.to_s.empty?
