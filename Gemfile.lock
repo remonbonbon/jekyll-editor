@@ -4,7 +4,7 @@ GEM
     coffee-script (2.3.0)
       coffee-script-source
       execjs
-    coffee-script-source (1.9.1)
+    coffee-script-source (1.8.0)
     execjs (2.4.0)
     httparty (0.13.3)
       json (~> 1.8)
@@ -30,6 +30,7 @@ PLATFORMS
 
 DEPENDENCIES
   coffee-script
+  coffee-script-source (= 1.8.0)
   httparty
   sass
   sinatra
