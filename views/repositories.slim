@@ -9,6 +9,8 @@ include global/header
       div.col-xs-6
         a.btn.btn-default href="/unauth" Unauthorize
     div.row
+      div v-if="repositories.length == 0"
+        h2 Now searching jekyll repositories...
       dl v-repeat="repositories"
         dt
           a href="{{url}}" = "{{name}}"
