@@ -67,6 +67,16 @@ get '/-/posts/:owner/:repo/:branch' do |owner, repo, branch|
   slim :posts
 end
 
+# edit a post
+get '/-/edit/:owner/:repo/:branch/:directory/:filename' do |owner, repo, branch, directory, filename|
+  @owner = owner
+  @repo = repo
+  @branch = branch
+  @directory = directory
+  @filename = filename
+  slim :edit
+end
+
 # compile coffee-script
 get %r{.*/(.+)\.coffee$} do |filename|
   coffee filename.to_sym
