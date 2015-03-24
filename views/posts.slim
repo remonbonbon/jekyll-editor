@@ -12,10 +12,6 @@ include global/header
       div.col-xs-6
         a.btn.btn-default href="/unauth" Unauthorize
     div.row
-      div v-if="posts.length == 0"
-        h2 = "Now loading jekyll posts... {{loading_rate | round}}% ({{loading.now}}/{{loading.total}})"
-        .progress
-          .progress-bar style="width: {{loading_rate}}%"
       ul v-repeat="posts | orderBy 'path' -1"
         li
           a href="/-/edit/#{@owner}/#{@repo}/#{@branch}/{{path}}"
