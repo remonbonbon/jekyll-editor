@@ -4,11 +4,6 @@ include global/header
   span.hidden#token = @token
   div.container
     div.row
-      div.col-xs-6
-        span = "your token is '#{@token}'"
-      div.col-xs-6
-        a.btn.btn-default href="/unauth" Unauthorize
-    div.row
       div v-if="repositories.length == 0"
         h2 = "Now searching jekyll repositories... {{loading_rate | round}}% ({{loading.now}}/{{loading.total}})"
         .progress

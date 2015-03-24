@@ -7,11 +7,6 @@ include global/header
   span.hidden#branch = @branch
   div.container
     div.row
-      div.col-xs-6
-        span = "your token is '#{@token}'"
-      div.col-xs-6
-        a.btn.btn-default href="/unauth" Unauthorize
-    div.row
       ul v-repeat="posts | orderBy 'path' -1"
         li
           a href="/-/edit/#{@owner}/#{@repo}/#{@branch}/{{path}}"

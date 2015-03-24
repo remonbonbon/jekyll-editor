@@ -7,14 +7,19 @@ scss:
     margin: 0;
     padding: 0;
   }
+  // ハンバーガーメニューが#appの後ろに隠れてしまうため
+  .navbar {
+    z-index: 1000
+  }
   #app {
     position: absolute;
     width: 100%;
-    height: 100%;
+    top: 52px;
+    bottom: 0;
   }
   #edit-container {
     position: absolute;
-    top: 35px;
+    top: 0;
     bottom: 0;
     width: 100%;
   }
@@ -64,12 +69,6 @@ scss:
   span.hidden#branch = @branch
   span.hidden#directory = @directory
   span.hidden#filename = @filename
-  div.container
-    div.row
-      div.col-xs-6
-        span = "your token is '#{@token}'"
-      div.col-xs-6
-        a.btn.btn-default href="/unauth" Unauthorize
   #edit-container
     #editor
       textarea#editor-header v-model="header"
